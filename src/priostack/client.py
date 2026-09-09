@@ -2,7 +2,7 @@ import requests
 from typing import Dict, Any, List, Optional
 
 class ACNClient:
-    """Client Python léger pour Priostack Agent Context Network (ACN)."""
+    """Client Python officiel pour Priostack Agent Context Network (ACN)."""
     
     def __init__(self, endpoint: str = "https://priostack.com/acn/rpc"):
         self.endpoint = endpoint
@@ -30,30 +30,71 @@ class ACNClient:
         result = self._rpc_call("noetic.register", {"displayName": display_name})
         return result.get("token") or result.get("content", [{}])[0].get("text")
 
-    def connect(self, token: str, max_tokens: int = 4096) -> str:
-        """Connecte l'agent et obtient un sessionId pour les opérations de mémoire."""
+    def connect(self, token: str, max_tokens: int = 512) -> Dict[str, Any]:
+        """Connecte l'agent, initialise la session et retourne les identifiants/droits."""
         result = self._rpc_call("noetic.connect", {
             "token": token,
             "maxResponseTokens": max_tokens
         })
-        self.session_id = result.get("sessionId")
-        return self.session_id
+        # Stockage du sessionId
+        if isinstance(result, dict) and "data" in result:
+            self.session_id = result["data"].get("sessionId")
+        else:
+            self.session_id = result.get("sessionId")
+        return result
 
-    def create_space(self, display_name: str) -> str:
-        """Crée un espace de mémoire étanche."""
+    def create_space(
+        self, 
+        display_name: str, 
+        default_rights: List[str] = ["read", "quote", "fact_use"]
+    ) -> Dict[str, Any]:
+        """Crée un espace de mémoire avec des droits par défaut (ceiling)."""
         if not self.session_id:
-            raise ValueError("Vous devez appeler connect() avant de créer un espace.")
+            raise ValueError("Appelez connect() avant de créer un espace.")
         return self._rpc_call("noetic.create_space", {
             "sessionId": self.session_id,
-            "displayName": display_name
+            "displayName": display_name,
+            "defaultRights": default_rights
         })
 
-    def store(self, space_id: str, content: str, object_type: str = "declaration") -> Dict[str, Any]:
-        """Stocke une mémoire (observation ou déclaration) dans un espace."""
+    def store(self, space_id: str, objects: List[Dict[str, str]]) -> Dict[str, Any]:
+        """Stocke des faits (observations ou déclarations) dans un espace."""
         if not self.session_id:
-            raise ValueError("Vous devez appeler connect() avant de stocker du contexte.")
+            raise ValueError("Appelez connect() avant de stocker du contexte.")
         return self._rpc_call("noetic.store", {
             "sessionId": self.session_id,
             "space": space_id,
-            "objects": [{"content": content, "type": object_type}]
+            "objects": objects
+        })
+
+    def grant_access(
+        self, 
+        space_id: str, 
+        subject_principal: str, 
+        rights: List[str] = ["read", "quote"],
+        world_mutation: str = "read"
+    ) -> Dict[str, Any]:
+        """
+        Partage le contexte d'un espace avec un autre agent (Grant Initiation par le proprio).
+        - rights: 'read', 'write', 'quote', 'share', 'export'
+        - world_mutation: 'read', 'propose', 'mutate'
+        """
+        if not self.session_id:
+            raise ValueError("Appelez connect() avant d'accorder des accès.")
+        return self._rpc_call("noetic.grant", {
+            "sessionId": self.session_id,
+            "space": space_id,
+            "subjectPrincipal": subject_principal,
+            "rights": rights,
+            "worldMutation": world_mutation
+        })
+
+    def request_access(self, space_id: str, requested_rights: List[str]) -> Dict[str, Any]:
+        """Sollicite l'accès à un espace partagé distant (Consumer-initiated handshake)."""
+        if not self.session_id:
+            raise ValueError("Appelez connect() avant de demander un accès.")
+        return self._rpc_call("noetic.request_access", {
+            "sessionId": self.session_id,
+            "space": space_id,
+            "requestedRights": requested_rights
         })
