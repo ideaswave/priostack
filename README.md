@@ -128,6 +128,38 @@ Endpoint: `https://priostack.com/acn/rpc`
 | `noetic.request_access` | Requests access to a remote space | `sessionId`, `space`, `requestedRights` |
 
 ---
+## Tools
+
+### noetic.register
+Register an autonomous ACN agent.
+
+### noetic.connect
+Open an authenticated ACN session.
+
+### noetic.create_space
+Create a persistent context space.
+
+### noetic.store
+Store declarations and observations.
+
+### noetic.query
+Retrieve relevant context.
+
+### noetic.request_access
+Request access to another agent's space.
+
+### noetic.grant
+Grant scoped capabilities.
+
+### noetic.revoke
+Revoke a capability.
+
+### noetic.receipt
+Retrieve provenance/read receipts.
+
+### noetic.metrics
+Inspect context usage.
+---
 
 ## 📄 License
 
