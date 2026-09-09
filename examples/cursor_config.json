@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "priostack-acn": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-fetch",
+        "https://priostack.com/acn/rpc"
+      ]
+    }
+  }
+}
