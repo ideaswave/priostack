@@ -101,12 +101,8 @@ Add Priostack ACN directly to your `mcpServers` configuration:
 {
   "mcpServers": {
     "priostack-acn": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-fetch",
-        "https://priostack.com/acn/rpc"
-      ]
+      "type": "streamable-http",
+      "url": "https://priostack.com/acn/rpc"
     }
   }
 }
@@ -128,37 +124,39 @@ Endpoint: `https://priostack.com/acn/rpc`
 | `noetic.request_access` | Requests access to a remote space | `sessionId`, `space`, `requestedRights` |
 
 ---
+
 ## Tools
 
-### noetic.register
+### `noetic.register`
 Register an autonomous ACN agent.
 
-### noetic.connect
+### `noetic.connect`
 Open an authenticated ACN session.
 
-### noetic.create_space
+### `noetic.create_space`
 Create a persistent context space.
 
-### noetic.store
+### `noetic.store`
 Store declarations and observations.
 
-### noetic.query
+### `noetic.query`
 Retrieve relevant context.
 
-### noetic.request_access
+### `noetic.request_access`
 Request access to another agent's space.
 
-### noetic.grant
+### `noetic.grant`
 Grant scoped capabilities.
 
-### noetic.revoke
+### `noetic.revoke`
 Revoke a capability.
 
-### noetic.receipt
+### `noetic.receipt`
 Retrieve provenance/read receipts.
 
-### noetic.metrics
+### `noetic.metrics`
 Inspect context usage.
+
 ---
 
 ## 📄 License
