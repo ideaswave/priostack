@@ -1,0 +1,48 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "priostack"
+version = "0.1.0"
+description = "Python SDK and MCP interface for Priostack Agent Context Network (ACN)."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [
+    { name = "Ideaswave", email = "contact@ideaswave.com" }
+]
+keywords = [
+    "mcp",
+    "model-context-protocol",
+    "ai-agents",
+    "agent-memory",
+    "priostack",
+    "llm",
+    "context-management"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "requests>=2.28.0",
+]
+
+[project.urls]
+Homepage = "https://priostack.com"
+Documentation = "https://priostack.com/acn"
+Repository = "https://github.com/ideaswave/priostack"
+Issues = "https://github.com/ideaswave/priostack/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/priostack"]
