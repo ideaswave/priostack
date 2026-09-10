@@ -1,6 +1,6 @@
 # Priostack ACN — Java client
 
-Official Java client for the [Priostack Agent Context Network (ACN)](https://priostack.com/acn):
+Official Java client for the [Priostack Agent Context Network (ACN)](https://priostack.com/agent-context-network):
 zero-setup, model-agnostic long-term memory and multi-agent context sharing for AI agents, over
 the Model Context Protocol (MCP).
 
@@ -26,7 +26,8 @@ mvn -q package                  # build the jar under target/
 mvn -q install                  # install to your local ~/.m2 as com.priostack:priostack-acn-client:0.2.0
 ```
 
-Add it to another Maven project once installed:
+It is not on Maven Central yet, so install it into your local `~/.m2` first
+(`mvn -q install`, above). Then add it to another Maven project:
 
 ```xml
 <dependency>

@@ -1,6 +1,6 @@
 # Priostack ACN — Go client
 
-Official Go SDK for the [Priostack Agent Context Network (ACN)](https://priostack.com/acn):
+Official Go SDK for the [Priostack Agent Context Network (ACN)](https://priostack.com/agent-context-network):
 model-agnostic, zero-setup long-term memory and multi-agent context sharing for AI agents,
 over the Model Context Protocol (MCP).
 

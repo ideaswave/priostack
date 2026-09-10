@@ -15,18 +15,20 @@ capability grants.
 
 ## Install
 
-From the published package:
+Not published to npm yet. Use it from a checkout of this repository — it is
+plain CommonJS with no dependencies, so there is nothing to build:
 
 ```bash
-npm install @priostack/acn
+git clone https://github.com/ideaswave/priostack.git
 ```
 
-Or use it straight from this repository directory (no build step — it is plain CommonJS):
+Then depend on the directory from your own `package.json`:
 
-```bash
-cd clients/javascript
-npm install        # installs nothing; just records the (empty) dependency set
+```json
+{ "dependencies": { "@priostack/acn": "file:../priostack/clients/javascript" } }
 ```
+
+Or copy `index.js` and `errors.js` into your project and require them directly.
 
 ## Usage
 

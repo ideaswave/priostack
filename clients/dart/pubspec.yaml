@@ -5,7 +5,7 @@ description: >-
 version: 0.1.0
 repository: https://github.com/ideaswave/priostack
 homepage: https://priostack.com
-documentation: https://priostack.com/acn
+documentation: https://priostack.com/agent-context-network
 issue_tracker: https://github.com/ideaswave/priostack/issues
 
 environment:

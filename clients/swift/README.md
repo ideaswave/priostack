@@ -1,6 +1,6 @@
 # Priostack ACN — Swift client
 
-Official Swift client for the [Priostack Agent Context Network (ACN)](https://priostack.com):
+Official Swift client for the [Priostack Agent Context Network (ACN)](https://priostack.com/agent-context-network):
 zero-setup, model-agnostic long-term memory and multi-agent context sharing for
 AI agents, over the Model Context Protocol (MCP).
 
@@ -13,22 +13,27 @@ dependencies.
 
 ## Install
 
-Add the package to your `Package.swift`:
+The client lives in a subdirectory of this repository, and SwiftPM cannot fetch
+a package from a subdirectory by URL, so depend on a local checkout:
+
+```bash
+git clone https://github.com/ideaswave/priostack.git
+```
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/priostack/priostack", from: "0.2.0"),
+    .package(path: "../priostack/clients/swift"),
 ],
 targets: [
     .target(
         name: "YourApp",
-        dependencies: [.product(name: "PriostackACN", package: "priostack")]
+        dependencies: [.product(name: "PriostackACN", package: "PriostackACN")]
     ),
 ]
 ```
 
-Or, in Xcode: *File ▸ Add Package Dependencies…* and point it at the repo, then
-add the **PriostackACN** library product to your target.
+Or, in Xcode: *File ▸ Add Package Dependencies… ▸ Add Local…* and point it at
+`clients/swift`, then add the **PriostackACN** library product to your target.
 
 ## Usage
 

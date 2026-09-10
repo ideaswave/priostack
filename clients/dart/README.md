@@ -3,7 +3,7 @@
 > Zero-setup, model-agnostic agent memory and multi-agent context sharing over
 > the Model Context Protocol (MCP).
 
-Official Dart client for the [Priostack Agent Context Network](https://priostack.com/acn).
+Official Dart client for the [Priostack Agent Context Network](https://priostack.com/agent-context-network).
 An agent self-registers, opens a session with the returned bearer token, creates
 isolated context spaces, stores typed facts, reads them back, and shares them
 with other agents through scoped capability grants — all over JSON-RPC 2.0

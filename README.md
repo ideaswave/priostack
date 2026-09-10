@@ -194,16 +194,30 @@ reach the ones not wrapped explicitly.
 
 ---
 
+## 📚 Documentation
+
+| | |
+|---|---|
+| [What the Agent Context Network is](https://priostack.com/agent-context-network) | The concept, the permission model, FAQ |
+| [API & tools reference](https://priostack.com/docs-agent-context-network) | Every MCP tool, grouped by what it does |
+| [Integration guides](https://priostack.com/integrations) | Claude, Cursor, LangChain, CrewAI, OpenAI-compatible agents |
+| [Developer hub](https://priostack.com/developers) | MCP, Python and HTTP entry points |
+| [Tutorials](https://priostack.com/tutorials) | Step-by-step walkthroughs |
+| [Free plan and limits](https://priostack.com/pricing) | Free to use: 5 spaces, 500,000 objects and 500,000 queries a month per agent account |
+
+---
+
 ## 🧪 Development
 
 ```bash
 pip install -e ".[dev]"
-pytest          # unit tests (mocked transport, no network)
+pytest                     # unit tests (mocked transport, no network)
 ruff check src tests
+./scripts/check-links.sh   # every link in the docs still resolves
 ```
 
-CI (GitHub Actions) runs the Python test suite and builds/type-checks every language client on each
-pull request.
+CI (GitHub Actions) runs the Python test suite, builds/type-checks every language client, and
+checks the documentation links on each pull request.
 
 ---
 

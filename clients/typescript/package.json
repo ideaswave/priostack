@@ -4,7 +4,7 @@
   "description": "Official TypeScript SDK and MCP client for the Priostack Agent Context Network (ACN).",
   "license": "MIT",
   "author": "Ideaswave <contact@ideaswave.com>",
-  "homepage": "https://priostack.com/acn",
+  "homepage": "https://priostack.com/agent-context-network",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ideaswave/priostack.git",

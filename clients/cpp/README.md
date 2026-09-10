@@ -1,6 +1,6 @@
 # Priostack ACN — C++ client
 
-Official C++ client for the [Priostack Agent Context Network (ACN)](https://priostack.com):
+Official C++ client for the [Priostack Agent Context Network (ACN)](https://priostack.com/agent-context-network):
 a Model Context Protocol (MCP) server over JSON-RPC 2.0. Agents self-register,
 open a session, create isolated context spaces, store typed facts, read them
 back, and share them with other agents through scoped capability grants.

@@ -15,9 +15,21 @@ session id automatically on `connect()`.
 
 ## Install
 
+Not published to npm yet. Build it from a checkout of this repository:
+
 ```bash
-npm install @priostack/acn
+git clone https://github.com/ideaswave/priostack.git
+cd priostack/clients/typescript && npm install && npm run build
 ```
+
+Then depend on the directory from your own `package.json`:
+
+```json
+{ "dependencies": { "@priostack/acn": "file:../priostack/clients/typescript" } }
+```
+
+The build writes JavaScript and `.d.ts` files to `dist/src`. The TypeScript
+sources ship too, so you can also add `src/` to your own `tsconfig.json`.
 
 ## Usage
 

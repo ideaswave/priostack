@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
 
   spec.metadata = {
     "homepage_uri" => "https://priostack.com",
-    "documentation_uri" => "https://priostack.com/acn",
+    "documentation_uri" => "https://priostack.com/agent-context-network",
     "source_code_uri" => "https://github.com/ideaswave/priostack",
     "bug_tracker_uri" => "https://github.com/ideaswave/priostack/issues",
     "rubygems_mfa_required" => "true"

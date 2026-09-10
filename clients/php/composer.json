@@ -23,7 +23,7 @@
     "support": {
         "issues": "https://github.com/ideaswave/priostack/issues",
         "source": "https://github.com/ideaswave/priostack",
-        "docs": "https://priostack.com/acn"
+        "docs": "https://priostack.com/agent-context-network"
     },
     "require": {
         "php": ">=8.1",

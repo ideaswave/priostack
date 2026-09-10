@@ -1,6 +1,6 @@
 # Priostack ACN — Kotlin client
 
-Official Kotlin/JVM client for the [Priostack Agent Context Network](https://priostack.com/acn)
+Official Kotlin/JVM client for the [Priostack Agent Context Network](https://priostack.com/agent-context-network)
 (ACN): a Model Context Protocol (MCP) server over JSON-RPC 2.0. An agent
 self-registers, opens a session, creates isolated context spaces, stores typed
 facts, reads them back, and shares them with other agents through scoped
@@ -21,11 +21,19 @@ The project ships a Gradle wrapper, so no local Gradle or `kotlinc` is needed:
 ./gradlew run --args="my-agent-name"
 ```
 
-Add it to your own Gradle build:
+Add it to your own Gradle build. The client is not on Maven Central yet, so
+build the jar and depend on the file:
+
+```bash
+./gradlew jar            # -> build/libs/priostack-acn-0.2.0.jar
+```
 
 ```kotlin
 repositories { mavenCentral() }
-dependencies { implementation("com.priostack:priostack-acn:0.1.0") }
+dependencies {
+    implementation(files("path/to/priostack/clients/kotlin/build/libs/priostack-acn-0.2.0.jar"))
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")  // the client's only dependency
+}
 ```
 
 ## Usage

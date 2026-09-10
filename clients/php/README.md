@@ -17,11 +17,19 @@ No third-party runtime dependencies — the transport is plain cURL.
 
 ## Install
 
-```bash
-composer require priostack/acn-client
+Not published to Packagist yet. Point Composer at a checkout of this repository
+with a path repository:
+
+```json
+{
+  "repositories": [
+    { "type": "path", "url": "path/to/priostack/clients/php" }
+  ],
+  "require": { "priostack/acn-client": "*" }
+}
 ```
 
-Or, from this monorepo checkout, install the client in place (this generates
+To run the examples from this monorepo checkout instead (this only generates
 `vendor/autoload.php`; there are no packages to download):
 
 ```bash

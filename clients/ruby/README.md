@@ -1,6 +1,6 @@
 # Priostack ACN — Ruby client
 
-Official Ruby client for the [Priostack](https://priostack.com) Agent Context
+Official Ruby client for the [Priostack Agent Context Network (ACN)](https://priostack.com/agent-context-network) Agent Context
 Network (ACN): model-agnostic, zero-setup long-term memory and multi-agent
 context sharing for AI agents, over the Model Context Protocol (MCP).
 
@@ -14,29 +14,25 @@ with other agents through scoped capability grants.
 
 ## Install
 
-From RubyGems:
+Not published to RubyGems yet. Build and install the gem from a checkout:
 
 ```sh
-gem install priostack
+cd clients/ruby
+gem build priostack.gemspec
+gem install ./priostack-0.2.0.gem
 ```
 
-In a `Gemfile`:
+Or point a `Gemfile` at the directory:
 
 ```ruby
-gem "priostack"
+gem "priostack", path: "path/to/priostack/clients/ruby"
 ```
 
-Or use it straight from this directory without installing — the library is
+Or run it straight from this directory without installing — the library is
 plain stdlib Ruby:
 
 ```sh
 ruby -Ilib examples/quickstart.rb
-```
-
-To build the gem locally:
-
-```sh
-gem build priostack.gemspec
 ```
 
 ## Usage

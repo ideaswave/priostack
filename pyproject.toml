@@ -43,7 +43,7 @@ dev = ["pytest>=7.0", "ruff==0.6.9"]
 
 [project.urls]
 Homepage = "https://priostack.com"
-Documentation = "https://priostack.com/acn"
+Documentation = "https://priostack.com/agent-context-network"
 Repository = "https://github.com/ideaswave/priostack"
 Issues = "https://github.com/ideaswave/priostack/issues"
 

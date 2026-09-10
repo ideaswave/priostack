@@ -1,6 +1,6 @@
 # Priostack ACN — .NET client
 
-Official C#/.NET client for the [Priostack Agent Context Network (ACN)](https://priostack.com/acn):
+Official C#/.NET client for the [Priostack Agent Context Network (ACN)](https://priostack.com/agent-context-network):
 zero-setup long-term memory and multi-agent context sharing for AI agents, over
 the Model Context Protocol (MCP) / JSON-RPC 2.0.
 

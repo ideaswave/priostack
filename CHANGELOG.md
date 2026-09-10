@@ -2,6 +2,27 @@
 
 All notable changes to the Priostack SDKs are documented here.
 
+## [Unreleased]
+
+### Fixed (documentation)
+- Every `priostack.com/acn` link (5 client READMEs and the Python, PHP, Dart, Ruby and
+  TypeScript package metadata) pointed at a 404. The Agent Context Network page lives at
+  **https://priostack.com/agent-context-network**.
+- The Swift and Rust packages named `github.com/priostack/priostack` — not this repository.
+- Install instructions named packages that are published nowhere: `npm install @priostack/acn`
+  (JavaScript, TypeScript), `gem install priostack` (Ruby), `composer require priostack/acn-client`
+  (PHP), `com.priostack:priostack-acn` on Maven Central (Kotlin, Scala, Java) and a SwiftPM URL
+  dependency that cannot resolve a package living in a repository subdirectory. Each now documents
+  the install path that actually works from a checkout, and says plainly that the registry release
+  is still to come. Python is unaffected: `pip install priostack` serves 0.2.0 from PyPI.
+- Kotlin client version was `0.1.0` while every other client was `0.2.0`.
+
+### Added
+- `scripts/check-links.sh` — checks that relative Markdown links resolve to files and that no URL in
+  the repository 404s. Runs as the `links` job in CI on every pull request.
+- A **Documentation** table in the README linking the live ACN overview, tool reference, integration
+  guides, developer hub, tutorials and the free-plan limits.
+
 ## [0.2.0] — 2026-09-10
 
 ### Fixed (Python client — the 0.1.1 client could not talk to the server)

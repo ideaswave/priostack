@@ -16,7 +16,15 @@ tool denials, and capturing the session id automatically on `connect`.
 
 ## Install
 
-Add to your `build.sbt`:
+Not published to Maven Central yet. Publish it to your local Ivy repository from
+a checkout of this repository:
+
+```bash
+cd clients/scala
+sbt publishLocal
+```
+
+Then add it to your `build.sbt`:
 
 ```scala
 libraryDependencies += "com.priostack" %% "priostack-acn" % "0.2.0"
