@@ -426,6 +426,7 @@ public sealed class AcnClient : IDisposable, IAsyncDisposable
     /// </summary>
     /// <param name="token">Explicit token; otherwise the captured/constructor token is used.</param>
     /// <param name="maxTokens">Ceiling on server response size for this session.</param>
+    /// <param name="cancellationToken">Token to cancel the request.</param>
     public async Task<ConnectResult> ConnectAsync(
         string? token = null, int maxTokens = 4096, CancellationToken cancellationToken = default)
     {

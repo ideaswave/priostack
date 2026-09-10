@@ -39,7 +39,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=7.0", "ruff>=0.1"]
+dev = ["pytest>=7.0", "ruff==0.6.9"]
 
 [project.urls]
 Homepage = "https://priostack.com"
@@ -58,3 +58,8 @@ pythonpath = ["src"]
 line-length = 100
 target-version = "py38"
 src = ["src", "tests"]
+
+[tool.ruff.lint]
+# A stable, version-independent rule set: pycodestyle errors/warnings, pyflakes,
+# and import sorting. Keeps CI deterministic regardless of the installed ruff.
+select = ["E", "F", "I", "W"]

@@ -47,6 +47,10 @@ clients/cpp/*.bin
 # Dart
 .dart_tool/
 clients/dart/.dart_tool/
+pubspec.lock
+
+# Ruby build output
+*.gem
 
 # PHP
 vendor/

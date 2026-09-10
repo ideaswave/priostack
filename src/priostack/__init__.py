@@ -5,15 +5,15 @@ AI agents, over the Model Context Protocol (MCP).
 """
 
 from .client import (
+    DEFAULT_ENDPOINT,
+    STORE_KINDS,
     ACNClient,
     ConnectResult,
-    DEFAULT_ENDPOINT,
     FetchResult,
     GrantResult,
     RegisterResult,
     SpaceResult,
     StoreResult,
-    STORE_KINDS,
 )
 from .exceptions import (
     ACNError,

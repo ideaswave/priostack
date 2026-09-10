@@ -81,8 +81,9 @@ public class AcnToolException : AcnException
     /// Any partial <c>data</c> the server attached to the failure (for example,
     /// the objects that were stored before a capacity fault). Detached from the
     /// response document, so it stays valid for the lifetime of the exception.
+    /// Intentionally hides <see cref="System.Exception.Data"/> (a different type).
     /// </summary>
-    public JsonElement? Data { get; }
+    public new JsonElement? Data { get; }
 
     private static string BuildMessage(string detail, string outcome)
     {

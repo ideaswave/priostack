@@ -73,13 +73,12 @@ class AcnToolError extends AcnError {
   AcnToolError(
     String detail, {
     String outcome = '',
-    String? method,
+    super.method,
     this.data,
   })  : detail = detail,
         outcome = outcome,
         super(
           detail.isNotEmpty ? detail : (outcome.isNotEmpty ? outcome : 'ACN tool error'),
-          method: method,
         );
 
   /// The server outcome (e.g. `capability-denied`).
@@ -96,64 +95,64 @@ class AcnToolError extends AcnError {
 /// `not-found` — no such session, space, or entity.
 class NotFoundError extends AcnToolError {
   /// Creates a `not-found` tool error.
-  NotFoundError(String detail, {String? method, Object? data})
-      : super(detail, outcome: 'not-found', method: method, data: data);
+  NotFoundError(super.detail, {super.method, super.data})
+      : super(outcome: 'not-found');
 }
 
 /// `invalid-query` — malformed arguments or an unknown enum value.
 class InvalidQueryError extends AcnToolError {
   /// Creates an `invalid-query` tool error.
-  InvalidQueryError(String detail, {String? method, Object? data})
-      : super(detail, outcome: 'invalid-query', method: method, data: data);
+  InvalidQueryError(super.detail, {super.method, super.data})
+      : super(outcome: 'invalid-query');
 }
 
 /// `capability-denied` — missing capability, or an invalid/revoked token.
 class CapabilityDeniedError extends AcnToolError {
   /// Creates a `capability-denied` tool error.
-  CapabilityDeniedError(String detail, {String? method, Object? data})
-      : super(detail, outcome: 'capability-denied', method: method, data: data);
+  CapabilityDeniedError(super.detail, {super.method, super.data})
+      : super(outcome: 'capability-denied');
 }
 
 /// `policy-denied` — a governance policy refused the operation.
 class PolicyDeniedError extends AcnToolError {
   /// Creates a `policy-denied` tool error.
-  PolicyDeniedError(String detail, {String? method, Object? data})
-      : super(detail, outcome: 'policy-denied', method: method, data: data);
+  PolicyDeniedError(super.detail, {super.method, super.data})
+      : super(outcome: 'policy-denied');
 }
 
 /// `requires-governance` — the change needs an explicit confirm step.
 class RequiresGovernanceError extends AcnToolError {
   /// Creates a `requires-governance` tool error.
-  RequiresGovernanceError(String detail, {String? method, Object? data})
-      : super(detail, outcome: 'requires-governance', method: method, data: data);
+  RequiresGovernanceError(super.detail, {super.method, super.data})
+      : super(outcome: 'requires-governance');
 }
 
 /// `stale-base` — the operation raced a newer state; re-read and retry.
 class StaleBaseError extends AcnToolError {
   /// Creates a `stale-base` tool error.
-  StaleBaseError(String detail, {String? method, Object? data})
-      : super(detail, outcome: 'stale-base', method: method, data: data);
+  StaleBaseError(super.detail, {super.method, super.data})
+      : super(outcome: 'stale-base');
 }
 
 /// `integrity-fault` — an internal consistency check failed.
 class IntegrityFaultError extends AcnToolError {
   /// Creates an `integrity-fault` tool error.
-  IntegrityFaultError(String detail, {String? method, Object? data})
-      : super(detail, outcome: 'integrity-fault', method: method, data: data);
+  IntegrityFaultError(super.detail, {super.method, super.data})
+      : super(outcome: 'integrity-fault');
 }
 
 /// `conflict` — the write conflicts with existing state.
 class ConflictError extends AcnToolError {
   /// Creates a `conflict` tool error.
-  ConflictError(String detail, {String? method, Object? data})
-      : super(detail, outcome: 'conflict', method: method, data: data);
+  ConflictError(super.detail, {super.method, super.data})
+      : super(outcome: 'conflict');
 }
 
 /// `capacity-exhausted` — a tier/registration/store ceiling was hit.
 class CapacityExhaustedError extends AcnToolError {
   /// Creates a `capacity-exhausted` tool error.
-  CapacityExhaustedError(String detail, {String? method, Object? data})
-      : super(detail, outcome: 'capacity-exhausted', method: method, data: data);
+  CapacityExhaustedError(super.detail, {super.method, super.data})
+      : super(outcome: 'capacity-exhausted');
 }
 
 /// `not-implemented` — the tool is unavailable on this ACN deployment.
@@ -162,8 +161,8 @@ class CapacityExhaustedError extends AcnToolError {
 /// does not offer self-registration.
 class NotSupportedError extends AcnToolError {
   /// Creates a `not-implemented` tool error.
-  NotSupportedError(String detail, {String? method, Object? data})
-      : super(detail, outcome: 'not-implemented', method: method, data: data);
+  NotSupportedError(super.detail, {super.method, super.data})
+      : super(outcome: 'not-implemented');
 }
 
 typedef _ToolErrorCtor = AcnToolError Function(String detail, {String? method, Object? data});
