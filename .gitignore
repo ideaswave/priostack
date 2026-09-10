@@ -53,7 +53,7 @@ pubspec.lock
 *.gem
 
 # PHP
-vendor/
+clients/php/vendor/
 composer.lock
 
 # Swift
