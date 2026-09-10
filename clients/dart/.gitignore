@@ -1,0 +1,7 @@
+# Dart / pub
+.dart_tool/
+.packages
+build/
+
+# A library package pins its deps via constraints, not a committed lockfile.
+pubspec.lock

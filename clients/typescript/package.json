@@ -1,0 +1,53 @@
+{
+  "name": "@priostack/acn",
+  "version": "0.2.0",
+  "description": "Official TypeScript SDK and MCP client for the Priostack Agent Context Network (ACN).",
+  "license": "MIT",
+  "author": "Ideaswave <contact@ideaswave.com>",
+  "homepage": "https://priostack.com/acn",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ideaswave/priostack.git",
+    "directory": "clients/typescript"
+  },
+  "bugs": {
+    "url": "https://github.com/ideaswave/priostack/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "ai-agents",
+    "agent-memory",
+    "priostack",
+    "llm",
+    "context-management"
+  ],
+  "type": "module",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    }
+  },
+  "files": [
+    "dist/src",
+    "src",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "example": "npm run build && node dist/examples/quickstart.js",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "20.14.15",
+    "typescript": "5.6.3"
+  }
+}

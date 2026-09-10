@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "priostack"
-version = "0.1.1"
+version = "0.2.0"
 description = "Python SDK and MCP interface for Priostack Agent Context Network (ACN)."
 readme = "README.md"
 requires-python = ">=3.8"
@@ -38,6 +38,9 @@ dependencies = [
     "requests>=2.28.0",
 ]
 
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "ruff>=0.1"]
+
 [project.urls]
 Homepage = "https://priostack.com"
 Documentation = "https://priostack.com/acn"
@@ -46,3 +49,12 @@ Issues = "https://github.com/ideaswave/priostack/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/priostack"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+src = ["src", "tests"]

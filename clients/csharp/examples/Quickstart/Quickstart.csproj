@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Priostack.Acn.Quickstart</RootNamespace>
+    <AssemblyName>Priostack.Acn.Quickstart</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Priostack.Acn\Priostack.Acn.csproj" />
+  </ItemGroup>
+
+</Project>

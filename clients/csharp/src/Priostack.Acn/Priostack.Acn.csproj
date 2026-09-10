@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Priostack.Acn</RootNamespace>
+    <AssemblyName>Priostack.Acn</AssemblyName>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- Not every compiler-generated record member carries its own XML doc. -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+
+    <PackageId>Priostack.Acn</PackageId>
+    <Version>0.2.0</Version>
+    <Authors>Ideaswave</Authors>
+    <Company>Ideaswave</Company>
+    <Description>Official .NET client for the Priostack Agent Context Network (ACN): zero-setup long-term memory and multi-agent context sharing for AI agents, over MCP / JSON-RPC 2.0.</Description>
+    <PackageTags>priostack;acn;mcp;model-context-protocol;ai-agents;agent-memory;json-rpc</PackageTags>
+    <PackageProjectUrl>https://priostack.com</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ideaswave/priostack</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <!--
+    Zero external dependencies: System.Net.Http and System.Text.Json both ship
+    in the net8.0 shared framework, so no PackageReference is needed.
+  -->
+
+</Project>

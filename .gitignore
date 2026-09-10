@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+.mypy_cache/
+
+# Node / TypeScript
+node_modules/
+*.tsbuildinfo
+clients/**/dist/
+
+# Java / Kotlin / Scala
+target/
+*.class
+.gradle/
+build/
+clients/java/target/
+clients/kotlin/build/
+clients/scala/target/
+
+# Go
+clients/go/priostack-smoke
+*.test
+
+# C# / .NET
+bin/
+obj/
+clients/csharp/bin/
+clients/csharp/obj/
+
+# Rust
+clients/rust/target/
+Cargo.lock
+
+# C++
+*.o
+*.out
+clients/cpp/*.bin
+
+# Dart
+.dart_tool/
+clients/dart/.dart_tool/
+
+# PHP
+vendor/
+composer.lock
+
+# Swift
+.build/
+clients/swift/.build/
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp

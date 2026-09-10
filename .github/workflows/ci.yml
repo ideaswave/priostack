@@ -1,0 +1,178 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+# Cancel superseded runs on the same ref.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # ---- Python (the published PyPI package) ----------------------------------
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m pip install --upgrade pip
+      - run: pip install -e ".[dev]"
+      - name: Lint (ruff)
+        run: ruff check src tests
+      - name: Test (pytest)
+        run: pytest -q
+
+  # ---- Language clients under clients/<lang>/ -------------------------------
+  javascript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - working-directory: clients/javascript
+        run: |
+          node --check index.js
+          node --check errors.js
+          node --check examples/quickstart.js
+          node -e "require('./index.js'); console.log('module loads')"
+
+  typescript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - working-directory: clients/typescript
+        run: |
+          npm install
+          npx tsc --noEmit
+
+  java:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: "21", cache: maven }
+      - working-directory: clients/java
+        run: mvn -B -q -DskipTests compile
+
+  go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with: { go-version: "stable" }
+      - working-directory: clients/go
+        run: |
+          go build ./...
+          go vet ./...
+          go test ./...
+
+  csharp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with: { dotnet-version: "8.0.x" }
+      - working-directory: clients/csharp
+        run: dotnet build -c Release
+
+  php:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with: { php-version: "8.2" }
+      - working-directory: clients/php
+        run: |
+          find src examples -name '*.php' -print0 | xargs -0 -n1 php -l
+          composer validate --no-check-all --no-check-publish
+
+  ruby:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with: { ruby-version: "3.2" }
+      - working-directory: clients/ruby
+        run: |
+          ruby -Ilib -e "require 'priostack'; puts Priostack::VERSION"
+          find lib examples -name '*.rb' -print0 | xargs -0 -n1 ruby -c
+          gem build priostack.gemspec
+
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with: { components: clippy }
+      - working-directory: clients/rust
+        run: |
+          cargo build --examples
+          cargo clippy -- -D warnings
+
+  cpp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev
+      - working-directory: clients/cpp
+        run: g++ -std=c++17 -I include examples/quickstart.cpp -lcurl -o /tmp/acn_cpp
+
+  dart:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+      - working-directory: clients/dart
+        run: |
+          dart pub get
+          dart analyze
+
+  swift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: swift-actions/setup-swift@v2
+      - working-directory: clients/swift
+        run: swift build
+
+  kotlin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: "21" }
+      - working-directory: clients/kotlin
+        run: ./gradlew --no-daemon build
+
+  scala:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: "21" }
+      - uses: sbt/setup-sbt@v1
+      - working-directory: clients/scala
+        run: sbt -batch compile
+
+  shell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y shellcheck
+      - working-directory: clients/shell
+        run: |
+          bash -n priostack.sh quickstart.sh
+          shellcheck -S warning priostack.sh quickstart.sh || true

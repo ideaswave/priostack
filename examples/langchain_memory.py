@@ -1,34 +1,82 @@
-from langchain.agents import initialize_agent, AgentType
-from langchain.chat_models import ChatOpenAI
-from langchain.tools import tool
+"""Give a LangChain agent durable, cross-session memory backed by the ACN.
+
+Two tools are exposed to the agent: one to persist a fact, one to recall facts.
+The ACN calls are the load-bearing part and use the real client signatures; the
+agent wiring is illustrative and tracks the modern LangChain tool-calling API.
+
+    pip install priostack langchain langchain-anthropic
+    export ANTHROPIC_API_KEY=sk-ant-...
+    python examples/langchain_memory.py
+"""
+
+import os
+
 from priostack import ACNClient
 
-# Initialisation du client ACN
-acn_client = ACNClient()
-acn_token = acn_client.register(display_name="langchain-agent")
-session_id = acn_client.connect(token=acn_token)
-space_id = acn_client.create_space(display_name="langchain-space")
+# One shared ACN session for the process. In a real app you would persist the
+# token (reg.token) and the space id and reconnect on the next run.
+acn = ACNClient()
+acn.register(display_name="langchain-agent")
+acn.connect()
+_space = acn.create_space(display_name="langchain-memory")
+SPACE_ID = _space.space_id
 
-@tool
-def save_persistent_memory(fact: str) -> str:
-    """Useful to store important facts, user preferences, or state updates for future sessions."""
-    acn_client.store(space_id=space_id, content=fact, object_type="declaration")
-    return f"Fact successfully stored in Priostack ACN: '{fact}'"
 
-# Configuration de l'agent LangChain
-llm = ChatOpenAI(model="gpt-4o", temperature=0)
-tools = [save_persistent_memory]
+def _save(fact: str) -> str:
+    acn.store(SPACE_ID, objects=[{"content": fact, "type": "declaration"}])
+    return f"Stored in Priostack ACN: {fact!r}"
 
-agent = initialize_agent(
-    tools,
-    llm,
-    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-    verbose=True
-)
 
-# Test d'exécution
+def _recall(topic: str) -> str:
+    hits = acn.fetch(SPACE_ID, query=topic, limit=5)
+    if not hits.objects:
+        return "No matching memory found."
+    return "\n".join(f"- {c}" for c in hits.contents())
+
+
+def build_tools():
+    """Wrap the ACN calls as LangChain tools."""
+    from langchain_core.tools import tool
+
+    @tool
+    def save_memory(fact: str) -> str:
+        """Persist an important fact or user preference for future sessions."""
+        return _save(fact)
+
+    @tool
+    def recall_memory(topic: str) -> str:
+        """Recall previously stored facts related to a topic (substring match)."""
+        return _recall(topic)
+
+    return [save_memory, recall_memory]
+
+
+def main() -> None:
+    tools = build_tools()
+
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        # No key: demonstrate the tools directly so the example still runs.
+        print(_save("The user's primary language is Python."))
+        print(_recall("language"))
+        return
+
+    from langchain.agents import AgentExecutor, create_tool_calling_agent
+    from langchain_anthropic import ChatAnthropic
+    from langchain_core.prompts import ChatPromptTemplate
+
+    llm = ChatAnthropic(model="claude-opus-5", temperature=0)
+    prompt = ChatPromptTemplate.from_messages([
+        ("system", "You are a helpful assistant with persistent memory. "
+                   "Use save_memory to remember facts and recall_memory to look them up."),
+        ("human", "{input}"),
+        ("placeholder", "{agent_scratchpad}"),
+    ])
+    agent = create_tool_calling_agent(llm, tools, prompt)
+    executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+
+    executor.invoke({"input": "Remember that the user's primary programming language is Python."})
+    print(executor.invoke({"input": "What is the user's primary programming language?"})["output"])
+
+
 if __name__ == "__main__":
-    response = agent.run(
-        "Remember that the user's primary programming language is Python."
-    )
-    print(response)
+    main()

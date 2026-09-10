@@ -1,0 +1,45 @@
+{
+    "name": "priostack/acn-client",
+    "description": "Official PHP client for the Priostack Agent Context Network (ACN): zero-setup, model-agnostic long-term memory and multi-agent context sharing over MCP.",
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://priostack.com",
+    "keywords": [
+        "mcp",
+        "model-context-protocol",
+        "ai-agents",
+        "agent-memory",
+        "priostack",
+        "llm",
+        "context-management"
+    ],
+    "authors": [
+        {
+            "name": "Ideaswave",
+            "email": "contact@ideaswave.com",
+            "homepage": "https://priostack.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/ideaswave/priostack/issues",
+        "source": "https://github.com/ideaswave/priostack",
+        "docs": "https://priostack.com/acn"
+    },
+    "require": {
+        "php": ">=8.1",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Priostack\\Acn\\": "src/"
+        }
+    },
+    "scripts": {
+        "quickstart": "@php examples/quickstart.php"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable"
+}

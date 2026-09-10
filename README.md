@@ -1,164 +1,212 @@
 # ⚡ Priostack Agent Context Network (ACN)
 
-> **Zero-setup, model-agnostic memory orchestration & multi-agent context sharing via MCP.**
+> **Zero-setup, model-agnostic long-term memory and multi-agent context sharing over MCP.**
 
 [![PyPI version](https://img.shields.io/pypi/v/priostack.svg)](https://pypi.org/project/priostack/)
+[![CI](https://github.com/ideaswave/priostack/actions/workflows/ci.yml/badge.svg)](https://github.com/ideaswave/priostack/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Priostack ACN decouples long-term memory from LLM vendor lock-in, treating persistent state as a **network resource**. Powered by the **Model Context Protocol (MCP)** over JSON-RPC, it allows AI agents to self-register, manage isolated context spaces, and securely exchange knowledge via scoped capability grants.
+Priostack ACN treats an agent's long-term memory as a **network resource** instead of something
+bolted to one LLM vendor. It is a **Model Context Protocol (MCP)** server, reached over JSON-RPC 2.0,
+where agents self-register, keep isolated context spaces, store typed facts, read them back, and share
+them with other agents through scoped, revocable capability grants.
+
+The public server is live at **`https://priostack.com/mcp`** (a discoverable Streamable-HTTP MCP
+endpoint; `https://priostack.com/acn/rpc` is a working alias).
 
 ---
 
-## 🔥 Key Architectural Features
+## 🔥 What it gives you
 
-- 🤖 **Zero-Setup Agent Onboarding**: Agents self-register via API (`noetic.register`). No dashboards, UIs, or credit cards required.
-- 🌐 **Model-Agnostic Context**: Decouple agent memory from underlying LLMs (OpenAI, Anthropic, local models).
-- 🤝 **Multi-Agent Context Sharing**: Grant or request explicit capabilities (`read`, `quote`, `fact_use`, `mutate`) between independent agents using `noetic.grant`.
-- 🧠 **Fact Typology**: Differentiate strictly between *observations* (measured facts) and *declarations* (rules/hypotheses) to minimize hallucinations.
-- 🔌 **Native MCP Integration**: Hook directly into Claude Desktop, Cursor, LangChain, CrewAI, or custom swarms.
+- 🤖 **Zero-setup onboarding** — an agent self-registers via `noetic.register` and gets a bearer
+  token. No dashboard, no UI, no credit card.
+- 🌐 **Model-agnostic memory** — the same context serves an OpenAI, Anthropic, or local-model agent;
+  memory is decoupled from the model.
+- 🤝 **Scoped multi-agent sharing** — grant another agent explicit content rights (`read`, `quote`,
+  `write`, `share`, `export`, ...) on a space, or let it `request_access` and approve it. Grants are
+  revocable and forward-only.
+- 🧠 **Typed facts** — store `declaration`s (rules/policies), `observation`s (measured facts), and
+  `measurement`s, keeping "what is asserted" separate from "what was observed".
+- 🔌 **Native MCP** — connect Claude Desktop, Cursor, or any MCP client by URL, or use one of the
+  SDKs below.
 
 ---
 
 ## 🚀 Quickstart (Python)
 
-### 1. Installation
-
 ```bash
 pip install priostack
 ```
 
-### 2. Basic Memory Workflow
-
 ```python
 from priostack import ACNClient
 
-# Initialize client
-acn = ACNClient()
+with ACNClient() as acn:                       # defaults to https://priostack.com/mcp
+    acn.register(display_name="my-agent")      # self-register; token captured on the client
+    acn.connect()                              # open a session; session id captured internally
 
-# Self-register agent & establish session
-token = acn.register(display_name="primary-agent")
-session_id = acn.connect(token=token)
-
-# Create an isolated memory space
-space = acn.create_space(display_name="production-rules")
-
-# Persist structured context
-acn.store(
-    space_id="space-1",
-    objects=[
+    space = acn.create_space(display_name="prod-memory")
+    acn.store(space.space_id, objects=[
         {"content": "Refunds over $500 require manager approval.", "type": "declaration"},
-        {"content": "Customer ID #402 initiated export pipeline.", "type": "observation"}
-    ]
-)
+        {"content": "Export pipeline latency was 1.8s at 14:02 UTC.", "type": "observation"},
+    ])
+
+    hits = acn.fetch(space.space_id, query="refund")   # substring content reader
+    for content in hits.contents():
+        print(content)
 ```
+
+> **Persist the token.** `register()` returns a bearer token that is shown once. Store it (and the
+> space id) and reconnect later with `ACNClient(token=...)` instead of registering again.
+
+More runnable examples in [`examples/`](examples/): [multi-agent sharing](examples/context_sharing.py),
+[request &amp; approve access](examples/request_and_approve.py),
+[fetch &amp; recall](examples/fetch_and_recall.py),
+[revoke &amp; rotate](examples/revoke_and_rotate.py), and memory integrations for
+[LangChain](examples/langchain_memory.py), [CrewAI](examples/crewai_memory.py), and a
+[Claude agent](examples/claude_agent_memory.py).
 
 ---
 
-## 🤝 Multi-Agent Context Sharing Example
+## 🤝 Multi-agent context sharing
 
-Agents can securely share context spaces without exposing full system privileges:
+An owner grants another agent scoped access to a space. The grant subject is the grantee's **agent
+id** (returned by `register()`), and the grantee must **reconnect** afterward to pick up the widened
+scope.
 
 ```python
-from priostack import ACNClient
+# Owner stores knowledge and grants read + quote to a worker agent.
+grant = owner.grant_access(space.space_id, worker_agent_id, rights=["read", "quote"])
 
-# --- AGENT 1: Master Agent (Context Owner) ---
-master = ACNClient()
-master_token = master.register(display_name="master-agent")
-master.connect(token=master_token)
+worker.connect()                       # reconnect to apply the grant
+print(worker.fetch(space.space_id, query="refund").contents())
 
-# Create space & store data
-space = master.create_space(display_name="shared-knowledge")
-master.store(space_id="space-1", objects=[
-    {"content": "Global API rate limit set to 100 req/min.", "type": "declaration"}
-])
-
-# --- AGENT 2: Worker Agent (Consumer) ---
-worker = ACNClient()
-worker_token = worker.register(display_name="worker-agent")
-worker_conn = worker.connect(token=worker_token)
-worker_id = worker_conn.get("data", {}).get("resolvedAccount")
-
-# --- GRANT CAPABILITIES ---
-# Master agent grants read and quote permissions to worker
-master.grant_access(
-    space_id="space-1",
-    subject_principal=worker_id,
-    rights=["read", "quote"],
-    world_mutation="read"
-)
-
-# Worker reconnects to sync new permissions
-worker.connect(token=worker_token)
+owner.revoke_access(grant.capability_ref)   # immediate, forward-only
 ```
+
+Prefer a pull model? The consumer calls `request_access(space_id, rights=["read"])`, the owner
+`list_requests()` and `approve_request(request_id)`. See
+[`examples/request_and_approve.py`](examples/request_and_approve.py).
 
 ---
 
-## 🛠️ MCP Integration (Cursor / Claude Desktop)
+## 🌍 SDKs in 15 languages
 
-Add Priostack ACN directly to your `mcpServers` configuration:
+Python is the reference SDK (this repo root, on PyPI). Idiomatic clients for 14 more languages live
+under [`clients/`](clients/), each with its own quickstart and README and each implementing the exact
+same wire contract ([`clients/SPEC.md`](clients/SPEC.md)).
+
+| Language | Path | HTTP + JSON stack |
+| :--- | :--- | :--- |
+| Python | [`/`](src/priostack) · PyPI `priostack` | `requests` |
+| JavaScript (Node ≥20) | [`clients/javascript`](clients/javascript) | built-in `fetch` |
+| TypeScript | [`clients/typescript`](clients/typescript) | global `fetch` (typed) |
+| Java (Maven) | [`clients/java`](clients/java) | `java.net.http` + Jackson |
+| Go | [`clients/go`](clients/go) | stdlib `net/http` |
+| C# / .NET 8 | [`clients/csharp`](clients/csharp) | `HttpClient` + `System.Text.Json` |
+| PHP (Composer) | [`clients/php`](clients/php) | curl |
+| Ruby | [`clients/ruby`](clients/ruby) | stdlib `net/http` |
+| Rust | [`clients/rust`](clients/rust) | `reqwest` + `serde` |
+| Kotlin (Gradle) | [`clients/kotlin`](clients/kotlin) | `java.net.http` |
+| Swift (SwiftPM) | [`clients/swift`](clients/swift) | `URLSession` + `Codable` |
+| C++17 | [`clients/cpp`](clients/cpp) | libcurl + nlohmann/json |
+| Dart | [`clients/dart`](clients/dart) | `package:http` |
+| Scala | [`clients/scala`](clients/scala) | `java.net.http` + uPickle |
+| Shell | [`clients/shell`](clients/shell) | `curl` + `jq` |
+
+Each client unwraps the MCP envelope, captures the session id, raises typed errors on tool denials,
+and reuses one HTTP connection. The Python, JavaScript, TypeScript, Java, Ruby, and C++ clients have
+been run end-to-end against the live server; the rest are verified against the contract and build in
+CI (see [`.github/workflows/ci.yml`](.github/workflows/ci.yml)).
+
+---
+
+## 🛠️ Use it from an MCP client (Claude Desktop, Cursor)
+
+The ACN is a discoverable Streamable-HTTP MCP server, so an MCP client connects by URL. Ready-made
+configs are in [`examples/mcp_config/`](examples/mcp_config/).
+
+**Claude Desktop** (Settings → Developer → Edit Config), via the `mcp-remote` bridge:
 
 ```json
 {
   "mcpServers": {
-    "priostack-acn": {
-      "type": "streamable-http",
-      "url": "https://priostack.com/acn/rpc"
-    }
+    "priostack-acn": { "command": "npx", "args": ["-y", "mcp-remote", "https://priostack.com/mcp"] }
   }
 }
 ```
 
----
+**Cursor** (native remote MCP by URL):
 
-## 📖 API Reference (JSON-RPC)
+```json
+{ "mcpServers": { "priostack-acn": { "url": "https://priostack.com/mcp" } } }
+```
 
-Endpoint: `https://priostack.com/acn/rpc`
+Sanity-check discovery yourself:
 
-| Method | Description | Key Parameters |
-| :--- | :--- | :--- |
-| `noetic.register` | Registers a new agent autonomously | `displayName` |
-| `noetic.connect` | Establishes an active session | `token`, `maxResponseTokens` |
-| `noetic.create_space` | Instantiates an isolated context space | `sessionId`, `displayName`, `defaultRights` |
-| `noetic.store` | Persists observations/declarations | `sessionId`, `space`, `objects` |
-| `noetic.grant` | Grants scoped access to another agent | `sessionId`, `space`, `subjectPrincipal`, `rights`, `worldMutation` |
-| `noetic.request_access` | Requests access to a remote space | `sessionId`, `space`, `requestedRights` |
+```bash
+curl -s https://priostack.com/mcp -H 'Content-Type: application/json' -H 'Accept: application/json' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | jq '.result.tools | length'
+```
 
 ---
 
-## Tools
+## 📖 API reference (JSON-RPC 2.0)
 
-### `noetic.register`
-Register an autonomous ACN agent.
+Endpoint: `https://priostack.com/mcp` (alias `https://priostack.com/acn/rpc`).
 
-### `noetic.connect`
-Open an authenticated ACN session.
+Every call is a `tools/call`:
 
-### `noetic.create_space`
-Create a persistent context space.
+```json
+{"jsonrpc":"2.0","id":1,"method":"tools/call",
+ "params":{"name":"noetic.store","arguments":{ "sessionId":"...", "space":"space-1", "objects":[...] }}}
+```
 
-### `noetic.store`
-Store declarations and observations.
+The response wraps the result envelope as text; unwrap it as
+`JSON.parse(response.result.content[0].text)` to get `{ok, outcome, data, detail?}`. On `ok:false`
+the `outcome` is one of `not-found`, `invalid-query`, `capability-denied`, `policy-denied`,
+`requires-governance`, `stale-base`, `integrity-fault`, `conflict`, `capacity-exhausted`,
+`not-implemented`. (Every SDK above does this unwrapping and error mapping for you.)
 
-### `noetic.query`
-Retrieve relevant context.
+| Method | Purpose | Key arguments | Notes |
+| :--- | :--- | :--- | :--- |
+| `noetic.register` | Self-register an agent | `displayName` | returns `data.token` (shown once) |
+| `noetic.connect` | Open a session | `token`, `maxResponseTokens` | returns `data.SessionID` (**PascalCase**) |
+| `noetic.create_space` | Create a context space | `sessionId`, `displayName`, `defaultRights` | returns `data.spaceId` |
+| `noetic.store` | Persist typed facts | `sessionId`, `space`, `objects[]` | `type` ∈ declaration \| observation \| measurement |
+| `noetic.fetch` | **Read stored content back** | `sessionId`, `space`, `query`, `limit` | substring filter; this is the reader |
+| `noetic.grant` | Grant scoped access | `sessionId`, `subjectPrincipal`, `resource`, `rights[]`, `worldMutation` | space arg is `resource`; grantee reconnects |
+| `noetic.revoke` | Revoke a capability | `sessionId`, `capabilityRef` | immediate, forward-only |
+| `noetic.request_access` | Ask for access | `sessionId`, `space`, `rights[]`, `reason` | rights arg is `rights` |
+| `noetic.list_requests` | List pending requests | `sessionId` | owner side |
+| `noetic.approve_request` | Approve a request | `sessionId`, `requestId`, `rights[]` | mints the grant |
+| `noetic.discover` | List public spaces | `query`, `limit` | no session required |
+| `noetic.metrics` | Usage for the session | `sessionId` | account + space gauges |
+| `noetic.rotate_token` | Mint a fresh token | `sessionId` | retires the old token |
+| `noetic.disconnect` | End the session | `sessionId` | durable facts are kept |
 
-### `noetic.request_access`
-Request access to another agent's space.
+> **`fetch` vs `query`:** `noetic.fetch` returns stored **content** (substring-filtered). `noetic.query`
+> is a *geometric* divergence probe over the memory, not a content read — don't reach for it to read
+> facts back.
 
-### `noetic.grant`
-Grant scoped capabilities.
+There are ~40 tools in total; every SDK exposes a generic `call(method, arguments)` escape hatch to
+reach the ones not wrapped explicitly.
 
-### `noetic.revoke`
-Revoke a capability.
+---
 
-### `noetic.receipt`
-Retrieve provenance/read receipts.
+## 🧪 Development
 
-### `noetic.metrics`
-Inspect context usage.
+```bash
+pip install -e ".[dev]"
+pytest          # unit tests (mocked transport, no network)
+ruff check src tests
+```
+
+CI (GitHub Actions) runs the Python test suite and builds/type-checks every language client on each
+pull request.
 
 ---
 
 ## 📄 License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+MIT. See [`LICENSE`](LICENSE).

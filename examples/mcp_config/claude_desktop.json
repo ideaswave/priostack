@@ -1,0 +1,9 @@
+{
+  "//": "Claude Desktop: Settings -> Developer -> Edit Config. Bridges the remote Streamable-HTTP MCP server through mcp-remote (no local install needed beyond Node/npx).",
+  "mcpServers": {
+    "priostack-acn": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://priostack.com/mcp"]
+    }
+  }
+}

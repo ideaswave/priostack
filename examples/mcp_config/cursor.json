@@ -1,0 +1,8 @@
+{
+  "//": "Cursor: Settings -> MCP -> Add. Recent Cursor connects to a remote Streamable-HTTP / SSE MCP server directly by URL. If your Cursor version lacks native URL support, use the mcp-remote form from claude_desktop.json instead.",
+  "mcpServers": {
+    "priostack-acn": {
+      "url": "https://priostack.com/mcp"
+    }
+  }
+}

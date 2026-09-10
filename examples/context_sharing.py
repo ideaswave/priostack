@@ -1,39 +1,60 @@
-from priostack import ACNClient
+"""Owner-initiated context sharing: grant another agent scoped read access.
 
-# --- AGENT 1 : Propriétaire du Contexte (Support Agent) ---
-agent_owner = ACNClient()
-key_owner = agent_owner.register(display_name="support-master")
-agent_owner.connect(token=key_owner)
+An owner agent stores knowledge in a private space and grants a worker agent
+`read` + `quote`. The subject of a grant is the grantee's **agent id** (returned
+by `register()`). The grantee must **reconnect** after the grant so the widened
+scope takes effect. See `request_and_approve.py` for the consumer-initiated flow.
+"""
 
-# 1. Création d'un espace pour le support avec des droits max
-space_info = agent_owner.create_space(
-    display_name="support-notes", 
-    default_rights=["read", "quote", "fact_use"]
-)
-space_id = "space-1" # ID de l'espace généré
+from priostack import ACNClient, NotFoundError
 
-# 2. Stockage de règles métier et d'observations
-agent_owner.store(space_id=space_id, objects=[
-    {"content": "Refunds over 30 days require a manager approval code.", "type": "declaration"},
-    {"content": "Customer ACME reported slow exports on the EU region.", "type": "observation"}
-])
 
-# --- AGENT 2 : Agent Tiers (Bot d'Assistance) ---
-agent_bot = ACNClient()
-key_bot = agent_bot.register(display_name="support-bot")
-conn_bot = agent_bot.connect(token=key_bot)
-bot_principal_id = conn_bot.get("data", {}).get("resolvedAccount", "acct-bot-2")
+def main() -> None:
+    # --- Owner agent (context owner) ---
+    owner = ACNClient()
+    owner.register(display_name="support-master")
+    owner.connect()
+    space = owner.create_space(
+        display_name="support-notes", default_rights=["read", "quote"]
+    )
+    owner.store(
+        space.space_id,
+        objects=[
+            {"content": "Refunds over 30 days require a manager approval code.", "type": "declaration"},
+            {"content": "Customer ACME reported slow exports in the EU region.", "type": "observation"},
+        ],
+    )
+    print(f"owner stored knowledge in {space.space_id}")
 
-# --- PARTAGE DE CONTEXTE (Grant) ---
-# L'agent propriétaire accorde le droit de lecture & de citation à l'agent Bot
-print(f"Octroi des accès de {space_id} à l'agent {bot_principal_id}...")
-agent_owner.grant_access(
-    space_id=space_id,
-    subject_principal=bot_principal_id,
-    rights=["read", "quote"],
-    world_mutation="read"
-)
+    # --- Worker agent (consumer) ---
+    worker = ACNClient()
+    worker_reg = worker.register(display_name="support-bot")
+    worker.connect()
 
-# L'agent Bot se reconnecte pour appliquer ses nouveaux droits accordés
-agent_bot.connect(token=key_bot)
-print("L'agent Bot a désormais accès au contexte partagé de l'agent Master !")
+    # Before any grant, the worker cannot see the owner's private space.
+    try:
+        worker.fetch(space.space_id)
+    except NotFoundError:
+        print("worker cannot read the space yet (as expected)")
+
+    # --- Grant: owner shares read + quote with the worker's agent id ---
+    grant = owner.grant_access(
+        space.space_id,
+        worker_reg.agent_id,          # the grantee's agent id, not its account
+        rights=["read", "quote"],
+    )
+    print(f"granted {grant.effective_rights} (capabilityRef {grant.capability_ref})")
+
+    # The worker must reconnect to apply the newly granted scope.
+    worker.connect()
+    hits = worker.fetch(space.space_id, query="refund")
+    print(f"worker now reads {hits.matched} object(s):")
+    for content in hits.contents():
+        print(f"  - {content}")
+
+    owner.close()
+    worker.close()
+
+
+if __name__ == "__main__":
+    main()
