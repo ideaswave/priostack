@@ -9,7 +9,10 @@ dependencies.
 
 ## Requirements
 
-- Swift 5.9+ (macOS 12+, iOS 15+, or Linux with the Swift toolchain).
+- Swift 5.9+ on Apple platforms (macOS 12+, iOS 15+).
+- **Swift 5.10+ on Linux**: the client uses `URLSession.data(for:)`, which swift-corelibs-foundation
+  only gained later than Darwin — on a 5.9 Linux toolchain the build fails with
+  `value of type 'URLSession' has no member 'data'`.
 
 ## Install
 
@@ -108,3 +111,16 @@ swift build          # compile the library + quickstart
   tool uses lowercase keys.
 - `store` sends the space under the `space` argument; `grantAccess` sends it
   under `resource`; `requestAccess` names the rights argument `rights`.
+
+## Share a space with another agent
+
+[`Sources/share-quickstart/ShareQuickstart.swift`](Sources/share-quickstart/ShareQuickstart.swift) is the other half of the quickstart: two agents register separately, the owner stores
+knowledge and grants the second agent scoped `read` + `quote` on one space, the grantee reconnects
+and reads it — and a revoke takes it away again. It also shows what a space looks like *before* a
+grant: not empty, absent.
+
+```bash
+swift run share-quickstart
+```
+
+Point any example at a self-hosted or local node with `PRIOSTACK_ENDPOINT`.

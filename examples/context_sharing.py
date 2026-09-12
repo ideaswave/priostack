@@ -20,8 +20,14 @@ def main() -> None:
     owner.store(
         space.space_id,
         objects=[
-            {"content": "Refunds over 30 days require a manager approval code.", "type": "declaration"},
-            {"content": "Customer ACME reported slow exports in the EU region.", "type": "observation"},
+            {
+                "content": "Refunds over 30 days require a manager approval code.",
+                "type": "declaration",
+            },
+            {
+                "content": "Customer ACME reported slow exports in the EU region.",
+                "type": "observation",
+            },
         ],
     )
     print(f"owner stored knowledge in {space.space_id}")

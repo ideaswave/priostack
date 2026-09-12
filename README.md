@@ -66,6 +66,32 @@ More runnable examples in [`examples/`](examples/): [multi-agent sharing](exampl
 [LangChain](examples/langchain_memory.py), [CrewAI](examples/crewai_memory.py), and a
 [Claude agent](examples/claude_agent_memory.py).
 
+Every example honours **`PRIOSTACK_ENDPOINT`**, so one exported variable points them all at a
+self-hosted node, a staging one, or a local one:
+
+```bash
+export PRIOSTACK_ENDPOINT=http://127.0.0.1:8091/rpc
+```
+
+---
+
+## 🧩 Agent-framework quickstarts
+
+Each one is a complete arc — register, create a space, store, **share it with a second agent**, read
+it back — and each runs on its own: the ACN calls are real, and the framework half is skipped with a
+message when the framework (or an LLM key) is not installed.
+
+| Framework | Quickstart | What it shows |
+| :--- | :--- | :--- |
+| **CrewAI** | [`examples/crewai_quickstart.py`](examples/crewai_quickstart.py) | Every crew member has its **own ACN identity**; the researcher owns the space and grants the writer `read` + `quote` |
+| **LangGraph** | [`examples/langgraph_quickstart.py`](examples/langgraph_quickstart.py) | Memory that **outlives the graph run** — run 2 answers from what run 1 stored — then a reviewer agent is granted `read` on the same space |
+| **AutoGen** | [`examples/autogen_quickstart.py`](examples/autogen_quickstart.py) | The **pull** handshake: the analyst discovers a published space, requests `read` with a reason, and the archivist approves |
+
+```bash
+pip install priostack
+python examples/crewai_quickstart.py          # works with or without crewai installed
+```
+
 ---
 
 ## 🤝 Multi-agent context sharing
@@ -114,10 +140,14 @@ same wire contract ([`clients/SPEC.md`](clients/SPEC.md)).
 | Scala | [`clients/scala`](clients/scala) | `java.net.http` + uPickle |
 | Shell | [`clients/shell`](clients/shell) | `curl` + `jq` |
 
+Each client ships **two quickstarts**: a solo one (register → create space → store → fetch) and a
+sharing one (`share_quickstart` — two agents, one space, an explicit grant, then a revoke), because
+an agent that only ever talks to itself is not using a network.
+
 Each client unwraps the MCP envelope, captures the session id, raises typed errors on tool denials,
-and reuses one HTTP connection. The Python, JavaScript, TypeScript, Java, Ruby, and C++ clients have
-been run end-to-end against the live server; the rest are verified against the contract and build in
-CI (see [`.github/workflows/ci.yml`](.github/workflows/ci.yml)).
+and reuses one HTTP connection. **Every one of the 15 sharing quickstarts has been run end-to-end
+against a live ACN node** — registering two agents, granting, reading and revoking — and every client
+builds in CI (see [`.github/workflows/ci.yml`](.github/workflows/ci.yml)).
 
 ---
 

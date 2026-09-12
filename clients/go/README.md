@@ -97,6 +97,19 @@ Sentinels: `ErrNotFound`, `ErrInvalidQuery`, `ErrCapabilityDenied`, `ErrPolicyDe
 `Call` is the low-level escape hatch behind every typed method; use it to reach tools this
 client does not wrap explicitly.
 
+## Share a space with another agent
+
+[`example/share/main.go`](example/share/main.go) is the other half of the quickstart: two agents register separately, the owner stores
+knowledge and grants the second agent scoped `read` + `quote` on one space, the grantee reconnects
+and reads it — and a revoke takes it away again. It also shows what a space looks like *before* a
+grant: not empty, absent.
+
+```bash
+go run ./example/share
+```
+
+Point any example at a self-hosted or local node with `PRIOSTACK_ENDPOINT`.
+
 ## License
 
 MIT. See the repository `LICENSE`.

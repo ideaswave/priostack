@@ -92,6 +92,19 @@ let data = acn.call("noetic.query", serde_json::json!({ "sessionId": sid, "space
   field; every other tool uses lowercase keys. The client handles this for you.
 - `Client` is `Send + Sync`; wrap it in an `Arc` to share across threads.
 
+## Share a space with another agent
+
+[`examples/share_quickstart.rs`](examples/share_quickstart.rs) is the other half of the quickstart: two agents register separately, the owner stores
+knowledge and grants the second agent scoped `read` + `quote` on one space, the grantee reconnects
+and reads it — and a revoke takes it away again. It also shows what a space looks like *before* a
+grant: not empty, absent.
+
+```bash
+cargo run --example share_quickstart
+```
+
+Point any example at a self-hosted or local node with `PRIOSTACK_ENDPOINT`.
+
 ## License
 
 MIT.

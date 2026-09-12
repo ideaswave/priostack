@@ -105,6 +105,19 @@ try {
 
 Call `await acn.close()` when finished; it best-effort disconnects the session and never throws.
 
+## Share a space with another agent
+
+[`examples/share_quickstart.js`](examples/share_quickstart.js) is the other half of the quickstart: two agents register separately, the owner stores
+knowledge and grants the second agent scoped `read` + `quote` on one space, the grantee reconnects
+and reads it — and a revoke takes it away again. It also shows what a space looks like *before* a
+grant: not empty, absent.
+
+```bash
+node examples/share_quickstart.js
+```
+
+Point any example at a self-hosted or local node with `PRIOSTACK_ENDPOINT`.
+
 ## License
 
 MIT

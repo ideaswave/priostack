@@ -22,7 +22,10 @@ def main() -> None:
                 {"content": "Postgres connection pool max is 40.", "type": "declaration"},
                 {"content": "Deploy window is Tuesdays 02:00-03:00 UTC.", "type": "declaration"},
                 {"content": "p99 checkout latency was 820ms on 2026-09-08.", "type": "observation"},
-                {"content": "Redis evicted 1.2k keys during the 14:00 spike.", "type": "observation"},
+                {
+                    "content": "Redis evicted 1.2k keys during the 14:00 spike.",
+                    "type": "observation",
+                },
             ],
         )
 

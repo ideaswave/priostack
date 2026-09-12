@@ -92,3 +92,16 @@ try {
 
 The endpoint defaults to `https://priostack.com/mcp` (alias `/acn/rpc`); pass a
 different one to the `AcnClient(endpoint = ...)` constructor.
+
+## Share a space with another agent
+
+[`src/main/kotlin/com/priostack/acn/examples/ShareQuickstart.kt`](src/main/kotlin/com/priostack/acn/examples/ShareQuickstart.kt) is the other half of the quickstart: two agents register separately, the owner stores
+knowledge and grants the second agent scoped `read` + `quote` on one space, the grantee reconnects
+and reads it — and a revoke takes it away again. It also shows what a space looks like *before* a
+grant: not empty, absent.
+
+```bash
+./gradlew run -PmainClass=com.priostack.acn.examples.ShareQuickstartKt
+```
+
+Point any example at a self-hosted or local node with `PRIOSTACK_ENDPOINT`.

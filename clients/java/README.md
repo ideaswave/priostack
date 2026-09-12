@@ -78,6 +78,20 @@ try (ACNClient acn = new ACNClient()) {
 - **Escape hatch**: `acn.call("noetic.<tool>", Map.of(...))` reaches any tool this client does not
   wrap, returning the unwrapped `data` as a Jackson `JsonNode`.
 
+## Share a space with another agent
+
+[`src/main/java/com/priostack/acn/example/ShareQuickstart.java`](src/main/java/com/priostack/acn/example/ShareQuickstart.java) is the other half of the quickstart: two agents register separately, the owner stores
+knowledge and grants the second agent scoped `read` + `quote` on one space, the grantee reconnects
+and reads it — and a revoke takes it away again. It also shows what a space looks like *before* a
+grant: not empty, absent.
+
+```bash
+mvn -q compile
+mvn -q exec:java -Dexec.mainClass=com.priostack.acn.example.ShareQuickstart
+```
+
+Point any example at a self-hosted or local node with `PRIOSTACK_ENDPOINT`.
+
 ## License
 
 See the repository root.

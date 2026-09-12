@@ -16,11 +16,16 @@ let package = Package(
     products: [
         .library(name: "PriostackACN", targets: ["PriostackACN"]),
         .executable(name: "quickstart", targets: ["quickstart"]),
+        .executable(name: "share-quickstart", targets: ["share-quickstart"]),
     ],
     targets: [
         .target(name: "PriostackACN"),
         .executableTarget(
             name: "quickstart",
+            dependencies: ["PriostackACN"]
+        ),
+        .executableTarget(
+            name: "share-quickstart",
             dependencies: ["PriostackACN"]
         ),
     ]

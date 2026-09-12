@@ -10,6 +10,8 @@ from __future__ import annotations
 import pytest
 
 from priostack import (
+    DEFAULT_ENDPOINT,
+    ENDPOINT_ENV_VAR,
     ACNClient,
     ACNToolError,
     ACNTransportError,
@@ -261,3 +263,18 @@ def test_retry_policy_never_retries_reads():
     assert retry.read == 0
     assert 429 in retry.status_forcelist and 503 in retry.status_forcelist
     c.close()
+
+
+def test_endpoint_defaults_to_canonical_mcp_url(mock):
+    assert ACNClient(session=mock).endpoint == DEFAULT_ENDPOINT
+
+
+def test_endpoint_reads_the_environment(mock, monkeypatch):
+    """Every example in this repository follows one exported variable, unedited."""
+    monkeypatch.setenv(ENDPOINT_ENV_VAR, "http://127.0.0.1:8091/rpc")
+    assert ACNClient(session=mock).endpoint == "http://127.0.0.1:8091/rpc"
+
+
+def test_explicit_endpoint_beats_the_environment(mock, monkeypatch):
+    monkeypatch.setenv(ENDPOINT_ENV_VAR, "http://127.0.0.1:8091/rpc")
+    assert ACNClient("https://acn.example.com/mcp", session=mock).endpoint == "https://acn.example.com/mcp"

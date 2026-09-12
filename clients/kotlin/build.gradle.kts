@@ -28,6 +28,11 @@ kotlin {
 }
 
 application {
-    // The quickstart's top-level `main` compiles to this class.
-    mainClass.set("com.priostack.acn.examples.QuickstartKt")
+    // The quickstart's top-level `main` compiles to this class. Pass -PmainClass to run another
+    // example, e.g.:
+    //   ./gradlew run -PmainClass=com.priostack.acn.examples.ShareQuickstartKt
+    mainClass.set(
+        (project.findProperty("mainClass") as String?)
+            ?: "com.priostack.acn.examples.QuickstartKt",
+    )
 }

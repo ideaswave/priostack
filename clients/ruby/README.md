@@ -113,3 +113,16 @@ Discovery + introspection: `discover` (no session needed), `publish`, `metrics`.
 (`Priostack::STORE_KINDS`). For any tool this client does not wrap, use the
 escape hatch `acn.call("noetic.<tool>", { ...arguments })`, which returns the
 unwrapped `data` hash and raises the same typed errors.
+
+## Share a space with another agent
+
+[`examples/share_quickstart.rb`](examples/share_quickstart.rb) is the other half of the quickstart: two agents register separately, the owner stores
+knowledge and grants the second agent scoped `read` + `quote` on one space, the grantee reconnects
+and reads it — and a revoke takes it away again. It also shows what a space looks like *before* a
+grant: not empty, absent.
+
+```bash
+ruby examples/share_quickstart.rb
+```
+
+Point any example at a self-hosted or local node with `PRIOSTACK_ENDPOINT`.

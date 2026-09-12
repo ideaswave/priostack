@@ -31,6 +31,7 @@ from __future__ import annotations
 
 import itertools
 import json
+import os
 import threading
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Sequence, Union
@@ -57,6 +58,12 @@ __all__ = [
 
 #: Canonical MCP endpoint (Streamable HTTP). ``/acn/rpc`` is a working alias.
 DEFAULT_ENDPOINT = "https://priostack.com/mcp"
+
+#: Environment override for the endpoint, read when none is passed to
+#: :class:`ACNClient`. Same variable the other language clients read. Point it at
+#: a self-hosted node or a local one (``http://127.0.0.1:8091/rpc``) and every
+#: example in this repository follows, unedited.
+ENDPOINT_ENV_VAR = "PRIOSTACK_ENDPOINT"
 
 #: Object ``type`` values the ``store`` tool accepts. Anything else is rejected
 #: server-side with ``invalid-query`` (proposals/inferences go through the
@@ -152,9 +159,10 @@ class ACNClient:
     Parameters
     ----------
     endpoint:
-        Base RPC URL. Defaults to the canonical Streamable-HTTP MCP endpoint
-        ``https://priostack.com/mcp``. The legacy ``.../acn/rpc`` path is an
-        accepted alias.
+        Base RPC URL. When omitted, the ``PRIOSTACK_ENDPOINT`` environment
+        variable is used, and failing that the canonical Streamable-HTTP MCP
+        endpoint ``https://priostack.com/mcp``. The legacy ``.../acn/rpc`` path
+        is an accepted alias.
     token:
         A previously issued bearer token, to reconnect an existing agent
         without registering again. Optional; :meth:`register` sets it.
@@ -174,7 +182,7 @@ class ACNClient:
 
     def __init__(
         self,
-        endpoint: str = DEFAULT_ENDPOINT,
+        endpoint: Optional[str] = None,
         *,
         token: Optional[str] = None,
         timeout: Union[float, tuple] = 30.0,
@@ -182,7 +190,7 @@ class ACNClient:
         backoff_factor: float = 0.5,
         session: Optional[requests.Session] = None,
     ) -> None:
-        self.endpoint = endpoint
+        self.endpoint = endpoint or os.environ.get(ENDPOINT_ENV_VAR) or DEFAULT_ENDPOINT
         self.timeout = timeout
         self.token: Optional[str] = token
         self.session_id: Optional[str] = None

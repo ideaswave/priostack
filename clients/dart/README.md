@@ -82,6 +82,19 @@ endpoint and prints each step.
 `metrics`, and the generic `call(method, arguments)` escape hatch for any other
 `noetic.*` tool.
 
+## Share a space with another agent
+
+[`example/share_quickstart.dart`](example/share_quickstart.dart) is the other half of the quickstart: two agents register separately, the owner stores
+knowledge and grants the second agent scoped `read` + `quote` on one space, the grantee reconnects
+and reads it — and a revoke takes it away again. It also shows what a space looks like *before* a
+grant: not empty, absent.
+
+```bash
+dart run example/share_quickstart.dart
+```
+
+Point any example at a self-hosted or local node with `PRIOSTACK_ENDPOINT`.
+
 ## License
 
 MIT — see [LICENSE](LICENSE).

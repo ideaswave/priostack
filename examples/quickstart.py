@@ -31,7 +31,10 @@ def main() -> None:
             space.space_id,
             objects=[
                 {"content": "User approved execution workflow #402.", "type": "declaration"},
-                {"content": "Export pipeline latency was 1.8s at 14:02 UTC.", "type": "observation"},
+                {
+                    "content": "Export pipeline latency was 1.8s at 14:02 UTC.",
+                    "type": "observation",
+                },
             ],
         )
         print(f"4. stored {stored.count} objects")

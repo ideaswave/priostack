@@ -6,6 +6,7 @@ AI agents, over the Model Context Protocol (MCP).
 
 from .client import (
     DEFAULT_ENDPOINT,
+    ENDPOINT_ENV_VAR,
     STORE_KINDS,
     ACNClient,
     ConnectResult,
@@ -36,6 +37,7 @@ __version__ = "0.2.0"
 __all__ = [
     "ACNClient",
     "DEFAULT_ENDPOINT",
+    "ENDPOINT_ENV_VAR",
     "STORE_KINDS",
     "RegisterResult",
     "ConnectResult",

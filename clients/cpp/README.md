@@ -111,6 +111,20 @@ One `ACNClient` owns a single reusable libcurl handle and serialises its calls
 with an internal mutex, so it is safe to share but processes one request at a
 time. Create several clients for concurrent requests.
 
+## Share a space with another agent
+
+[`examples/share_quickstart.cpp`](examples/share_quickstart.cpp) is the other half of the quickstart: two agents register separately, the owner stores
+knowledge and grants the second agent scoped `read` + `quote` on one space, the grantee reconnects
+and reads it — and a revoke takes it away again. It also shows what a space looks like *before* a
+grant: not empty, absent.
+
+```bash
+g++ -std=c++17 -Iinclude examples/share_quickstart.cpp -lcurl -o share_quickstart
+./share_quickstart
+```
+
+Point any example at a self-hosted or local node with `PRIOSTACK_ENDPOINT`.
+
 ## License
 
 MIT. See the repository `LICENSE`.
