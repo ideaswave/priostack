@@ -40,7 +40,7 @@
 # --------------------------------------------------------------------------- #
 # Configuration (override by exporting before sourcing, or assigning after).
 # --------------------------------------------------------------------------- #
-ACN_VERSION="0.2.0"
+ACN_VERSION="0.3.0"
 : "${ACN_ENDPOINT:=https://priostack.com/mcp}"   # canonical MCP endpoint; /acn/rpc is an alias
 : "${ACN_TIMEOUT:=30}"                            # per-call timeout in seconds
 : "${ACN_USER_AGENT:=priostack-shell/${ACN_VERSION}}"

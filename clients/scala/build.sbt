@@ -1,6 +1,6 @@
 ThisBuild / scalaVersion := "3.3.4"
 ThisBuild / organization := "com.priostack"
-ThisBuild / version      := "0.2.0"
+ThisBuild / version      := "0.3.0"
 
 lazy val root = (project in file("."))
   .settings(

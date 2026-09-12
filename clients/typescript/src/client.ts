@@ -57,7 +57,7 @@ import {
 export const DEFAULT_ENDPOINT = "https://priostack.com/mcp";
 
 /** Client version, reported in the `User-Agent` header. */
-export const VERSION = "0.2.0";
+export const VERSION = "0.3.0";
 
 // --------------------------------------------------------------------------- //
 // Small internal helpers for narrowing the untyped server JSON.

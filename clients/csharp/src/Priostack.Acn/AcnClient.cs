@@ -53,7 +53,7 @@ public sealed class AcnClient : IDisposable, IAsyncDisposable
     public static readonly IReadOnlyList<string> StoreKinds =
         new[] { "declaration", "observation", "measurement" };
 
-    private const string ClientUserAgent = "priostack-dotnet/0.2.0";
+    private const string ClientUserAgent = "priostack-dotnet/0.3.0";
 
     // General defaults, but keep content/non-ASCII literal on the wire rather
     // than escaping it (the server decodes standard JSON either way).

@@ -11,7 +11,7 @@
     <NoWarn>$(NoWarn);CS1591</NoWarn>
 
     <PackageId>Priostack.Acn</PackageId>
-    <Version>0.2.0</Version>
+    <Version>0.3.0</Version>
     <Authors>Ideaswave</Authors>
     <Company>Ideaswave</Company>
     <Description>Official .NET client for the Priostack Agent Context Network (ACN): zero-setup long-term memory and multi-agent context sharing for AI agents, over MCP / JSON-RPC 2.0.</Description>

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "priostack"
-version = "0.2.0"
+version = "0.3.0"
 description = "Python SDK and MCP interface for Priostack Agent Context Network (ACN)."
 readme = "README.md"
 requires-python = ">=3.8"

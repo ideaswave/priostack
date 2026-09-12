@@ -36,7 +36,7 @@ public actor ACNClient {
     public static let defaultEndpoint = URL(string: "https://priostack.com/mcp")!
 
     /// Client version, reported in the `User-Agent` header.
-    public static let version = "0.2.0"
+    public static let version = "0.3.0"
 
     /// The RPC endpoint this client targets.
     public nonisolated let endpoint: URL

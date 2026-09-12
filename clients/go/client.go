@@ -14,7 +14,7 @@ import (
 )
 
 // Version is the client version, reported in the User-Agent header.
-const Version = "0.2.0"
+const Version = "0.3.0"
 
 // DefaultEndpoint is the canonical Streamable-HTTP MCP endpoint. The legacy
 // https://priostack.com/acn/rpc path is an accepted alias.

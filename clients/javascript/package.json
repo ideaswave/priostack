@@ -1,6 +1,6 @@
 {
   "name": "@priostack/acn",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Official Node.js client for the Priostack Agent Context Network (ACN) over MCP / JSON-RPC 2.0.",
   "keywords": [
     "priostack",

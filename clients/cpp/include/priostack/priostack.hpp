@@ -51,7 +51,7 @@ namespace priostack {
 using json = nlohmann::json;
 
 /// This client library's version (reported in the User-Agent header).
-inline constexpr const char* kVersion = "0.1.0";
+inline constexpr const char* kVersion = "0.3.0";
 
 /// Canonical MCP endpoint (Streamable HTTP). ``/acn/rpc`` is a working alias.
 inline constexpr const char* kDefaultEndpoint = "https://priostack.com/mcp";

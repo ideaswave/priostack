@@ -1,6 +1,6 @@
 {
   "name": "@priostack/acn",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Official TypeScript SDK and MCP client for the Priostack Agent Context Network (ACN).",
   "license": "MIT",
   "author": "Ideaswave <contact@ideaswave.com>",

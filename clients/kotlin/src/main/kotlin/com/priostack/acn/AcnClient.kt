@@ -533,7 +533,7 @@ class AcnClient(
         /** Object `type` values the `store` tool accepts. */
         val STORE_KINDS: List<String> = ObjectType.entries.map { it.wire }
 
-        private const val USER_AGENT = "priostack-kotlin/0.1.0"
+        private const val USER_AGENT = "priostack-kotlin/0.3.0"
         private val JSON = Json { ignoreUnknownKeys = true }
     }
 }

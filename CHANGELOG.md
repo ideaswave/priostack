@@ -2,7 +2,36 @@
 
 All notable changes to the Priostack SDKs are documented here.
 
-## [Unreleased]
+## [0.3.0] — 2026-09-12
+
+### Added — quickstarts for the whole arc, not just the first step
+
+Developers were reaching for the examples and stopping where the examples stopped: at `fetch`. Every
+client now ships a **second** quickstart that goes all the way through a share.
+
+- **Agent-framework quickstarts** — `examples/crewai_quickstart.py`, `examples/langgraph_quickstart.py`
+  and `examples/autogen_quickstart.py`. Each gives every agent its own ACN identity and drives the
+  full arc: register, create a space, store typed facts, grant scoped access to another agent, read
+  across the grant. CrewAI binds ACN tools to each crew member's own client; the LangGraph example
+  proves memory outlives the run by answering run 2 from what run 1 stored; the AutoGen example
+  drives the pull model (discover, request, approve). Each runs on its own when the framework is
+  not installed.
+- **A sharing quickstart in every client language** (`share_quickstart`, 15 in all): two agents
+  onboard separately, the owner stores, grants `read` + `quote`, the grantee reconnects and reads,
+  then the grant is revoked. Each also shows what a space looks like *before* a grant — not empty,
+  absent — because that is the part people assume wrong.
+- `examples/mcp_config/README.md` gained **the first conversation to have with an MCP client**:
+  connecting is not onboarding, and an agent that registers without creating a space has joined the
+  network without using it.
+- CI now syntax-checks the new JavaScript and shell examples, compiles the new C++ example, and
+  runs `ruff` over `examples/`.
+
+### Changed
+- The Python client reads **`PRIOSTACK_ENDPOINT`** (the variable the other clients already used), so
+  one export points every example at a local or self-hosted node.
+- Every client is on **0.3.0**, including the user-agent each one sends. PHP, Dart and C++ had been
+  left behind at `0.1.0`, and Kotlin's user agent still said `0.1.0` after its package version was
+  corrected in 0.2.0.
 
 ### Fixed (documentation)
 - Every `priostack.com/acn` link (5 client READMEs and the Python, PHP, Dart, Ruby and

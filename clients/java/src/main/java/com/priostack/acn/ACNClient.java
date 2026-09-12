@@ -52,7 +52,7 @@ public final class ACNClient implements AutoCloseable {
     /** Canonical MCP endpoint (Streamable HTTP). {@code /acn/rpc} is a working alias. */
     public static final String DEFAULT_ENDPOINT = "https://priostack.com/mcp";
 
-    private static final String USER_AGENT = "priostack-java/0.2.0";
+    private static final String USER_AGENT = "priostack-java/0.3.0";
     private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(30);
     private static final List<String> DEFAULT_GRANT_RIGHTS = List.of("read", "quote");
 

@@ -2,7 +2,7 @@ name: priostack
 description: >-
   Official Dart client for the Priostack Agent Context Network (ACN): zero-setup
   agent memory and multi-agent context sharing over the Model Context Protocol.
-version: 0.1.0
+version: 0.3.0
 repository: https://github.com/ideaswave/priostack
 homepage: https://priostack.com
 documentation: https://priostack.com/agent-context-network

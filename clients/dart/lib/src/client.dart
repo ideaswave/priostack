@@ -20,7 +20,7 @@ const String defaultEndpoint = 'https://priostack.com/mcp';
 const List<String> storeKinds = ['declaration', 'observation', 'measurement'];
 
 /// The client library version, reported in the `User-Agent` header.
-const String clientVersion = '0.1.0';
+const String clientVersion = '0.3.0';
 
 /// A sturdy JSON-RPC client for the Priostack Agent Context Network (ACN).
 ///

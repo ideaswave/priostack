@@ -62,7 +62,7 @@ final class Client
     public const STORE_KINDS = ['declaration', 'observation', 'measurement'];
 
     /** Client version, surfaced in the User-Agent header. */
-    public const VERSION = '0.1.0';
+    public const VERSION = '0.3.0';
 
     private string $endpoint;
     private float $timeout;

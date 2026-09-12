@@ -470,7 +470,7 @@ object AcnClient:
   /** Object `type` values the `store` tool accepts. Anything else is rejected. */
   val StoreKinds: Set[String] = Set("declaration", "observation", "measurement")
 
-  private[acn] val UserAgent: String = "priostack-scala/0.2.0"
+  private[acn] val UserAgent: String = "priostack-scala/0.3.0"
 
   /** Create a client that owns a freshly built [[java.net.http.HttpClient]]. */
   def apply(
